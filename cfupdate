@@ -1,0 +1,72 @@
+#!/bin/sh
+CFEMAIL=natalie.tay@gmail.com
+CFHOST=lie.sg
+CFHOSTS=nas.lie.sg,server.lie.sg,nata.lie.sg
+CFID1=152965657
+CFHOST1=nas.lie.sg
+CFID2=152965675
+CFHOST2=server.lie.sg
+CFID3=175710019
+CFHOST3=nata.lie.sg
+CFNS=gina.ns.cloudflare.com
+CFIP=$(curl icanhazip.com)
+CFAPIKEY=$CFAPIKEY
+CFHOSTIP=$(nslookup $(echo $CFHOST1 | cut -d ',' -f1)$CFNS | grep Address | tail -1 | cut -d ' ' -f2)
+CFURL1="https://www.cloudflare.com/api_json.html \
+  -d 'a=rec_edit' \
+  -d 'tkn=$CFAPIKEY' \
+  -d 'id=$CFID1' \
+  -d 'email=$CFEMAIL' \
+  -d 'z=lie.sg' \
+  -d 'type=A' \
+  -d 'name=nas' \
+  -d 'content=$CFIP' \
+  -d 'service_mode=0' \
+  -d 'ttl=1'"
+CFURL2="https://www.cloudflare.com/api_json.html \
+  -d 'a=rec_edit' \
+  -d 'tkn=$CFAPIKEY' \
+  -d 'id=$CFID2' \
+  -d 'email=$CFEMAIL' \
+  -d 'z=lie.sg' \
+  -d 'type=A' \
+  -d 'name=server' \
+  -d 'content=$CFIP' \
+  -d 'service_mode=1' \
+  -d 'ttl=1'"
+CFURL3="https://www.cloudflare.com/api_json.html \
+  -d 'a=rec_edit' \
+  -d 'tkn=$CFAPIKEY' \
+  -d 'id=$CFID3' \
+  -d 'email=$CFEMAIL' \
+  -d 'z=lie.sg' \
+  -d 'type=A' \
+  -d 'name=nata' \
+  -d 'content=$CFIP' \
+  -d 'service_mode=0' \
+  -d 'ttl=1'"
+
+
+
+if [ "$CFIP" != "$CFHOSTIP" ]
+then
+    sh -c "curl $CFURL1"
+fi
+
+if [ "$CFIP" != "$CFHOSTIP" ]
+then
+    sh -c "curl $CFURL2"
+fi
+
+if [ "$CFIP" != "$CFHOSTIP" ]
+then
+    sh -c "curl $CFURL3"
+fi
+
+
+#curl -s https://www.cloudflare.com/api_json.html \
+#-d "a=rec_load_all" \
+#-d "tkn=$CFAPIKEY" \
+#-d "email=$CFEMAIL" \
+#-d "z=$CFHOST" | python -mjson.toold 'z=lie.sg' \
+
