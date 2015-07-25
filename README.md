@@ -1,0 +1,2 @@
+# cfupdate
+Update cloudflare DNS
